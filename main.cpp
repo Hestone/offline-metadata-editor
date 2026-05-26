@@ -4,12 +4,14 @@
 #include <iostream>
 
 void displayMainMenu() {
-    while(true)
+    int option = -1;
+    do
     {
-        std::cout << "1. Edit" << std::endl;
-        std::cout << "2. Close" << std::endl;
+        std::cout << "1. Edit song title" << std::endl;
+        std::cout << "2. Edit artist name" << std::endl;
+        std::cout << "3. Change song cover" << std::endl;
+        std::cout << "4. Close" << std::endl;
         std::cout << "Type \"1\" or \"2\"" << std::endl;
-        int option = -1;
         std::cin >> option;
         switch(option)
         {
@@ -23,12 +25,11 @@ void displayMainMenu() {
 
                 break;            
             case 4:
-
                 break;
             default:
                 std::cout << "Unknown option" << std::endl;
         }
-    }
+    } while (option != 4);
 }
 
 void run() {
