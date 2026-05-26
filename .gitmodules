@@ -1,3 +1,6 @@
 [submodule "taglib"]
 	path = taglib
 	url = https://github.com/taglib/taglib.git
+[submodule "nativefiledialog-extended"]
+	path = nfd
+	url = https://github.com/btzy/nativefiledialog-extended.git

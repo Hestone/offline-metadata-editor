@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(offlinemusiceditor VERSION 0.1 LANGUAGES CXX)
+project(offlinemusiceditor VERSION 0.1 LANGUAGES CXX OBJC OBJCXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,7 +16,21 @@ qt_add_executable(offlinemusiceditor
     mainwindow.ui
 )
 
-target_link_libraries(offlinemusiceditor PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+# TagLib
+find_library(TAGLIB tag PATHS ${CMAKE_SOURCE_DIR}/taglib-install/lib NO_DEFAULT_PATH)
+include_directories(${CMAKE_SOURCE_DIR}/taglib-install/include)
+
+
+add_subdirectory(nfd)
+
+target_link_libraries(offlinemusiceditor PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    nfd
+    ${TAGLIB}
+    z
+    "-framework AppKit"
+    "-framework UniformTypeIdentifiers"
+)
 
 set_target_properties(offlinemusiceditor PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

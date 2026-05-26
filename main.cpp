@@ -7,6 +7,7 @@
 #include <limits>
 #include "taglib-install/include/taglib/fileref.h"
 #include "taglib-install/include/taglib/tag.h"
+#include "nfd/src/include/nfd.h"
 
 void displayMainMenu()
 {
@@ -43,6 +44,41 @@ void editArtistName(char * filename)
     };
 }
 
+void editSongCover(char * filename)
+{
+    TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
+
+    NFD_Init();
+
+    nfdchar_t *outPath = nullptr;
+
+    nfdu8filteritem_t filters[1] = {
+        { "Image Files", "png, jpg, jpeg" }
+    };
+    
+    nfdopendialogu8args_t args = {0};
+    args.filterList = filters;
+    args.filterCount = 1;
+    nfdresult_t result = NFD_OpenDialogU8_With(&outPath, &args);
+
+    if (result == NFD_OKAY)
+    {
+        puts("Success!");
+        puts(outPath);
+        NFD_FreePathU8(outPath);
+    }
+    else if (result == NFD_CANCEL)
+    {
+        puts("User pressed cancel.");
+    }
+    else
+    {
+        printf("Error: %s\n", NFD_GetError());
+    }
+
+    NFD_Quit();
+}
+
 void run(char * filename) 
 {
     // Open file
@@ -63,7 +99,7 @@ void run(char * filename)
                 editArtistName(filename);
                 break;
             case 3:
-
+                editSongCover(filename);
                 break;            
             case 4:
                 break;
