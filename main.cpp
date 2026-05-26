@@ -60,7 +60,7 @@ void run(char * filename)
                 editSongTitle(filename);
                 break;
             case 2:
-
+                editArtistName(filename);
                 break;
             case 3:
 
