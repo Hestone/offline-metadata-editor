@@ -16,9 +16,10 @@ void displayMainMenu()
 {
     std::cout << "1. Edit song title" << std::endl;
     std::cout << "2. Edit artist name" << std::endl;
-    std::cout << "3. Change song cover" << std::endl;
-    std::cout << "4. Close" << std::endl;
-    std::cout << "Type any number from \"1\" to \"4\"" << std::endl;
+    std::cout << "3. Edit album name" << std::endl;
+    std::cout << "4. Change song cover" << std::endl;
+    std::cout << "5. Close" << std::endl;
+    std::cout << "Type any number from \"1\" to \"5\"" << std::endl;
 }
 
 void editSongTitle(char * filename)
@@ -46,6 +47,20 @@ void editArtistName(char * filename)
         std::cout << "Artist name changed" << std::endl;
     };
 }
+
+void editAlbumName(char * filename)
+{
+    TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
+    std::cout << "Type new album name: ";
+    std::string album_name;
+    std::getline(std::cin, album_name);
+    songfile.tag()->setAlbum(album_name);
+    if (songfile.save())
+    {
+        std::cout << "Album name changed" << std::endl;
+    };
+}
+
 
 void editSongCover(char * filename)
 {
@@ -147,14 +162,17 @@ void run(char * filename)
                 editArtistName(filename);
                 break;
             case 3:
+                editAlbumName(filename);
+                break;   
+            case 4:
                 editSongCover(filename);
                 break;            
-            case 4:
+            case 5:
                 break;
             default:
                 std::cout << "Unknown option" << std::endl;
         }
-    } while (option != 4);
+    } while (option != 5);
 
     // Close file
     ReadFile.close();
