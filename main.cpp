@@ -30,6 +30,19 @@ void editSongTitle(char * filename)
     };
 }
 
+void editArtistName(char * filename)
+{
+    TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
+    std::cout << "Type new artist title: ";
+    std::string artist_name;
+    std::getline(std::cin, artist_name);
+    songfile.tag()->setArtist(artist_name);
+    if (songfile.save())
+    {
+        std::cout << "Artist name changed" << std::endl;
+    };
+}
+
 void run(char * filename) 
 {
     // Open file
