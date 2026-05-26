@@ -1,0 +1,11 @@
+prefix=/Users/jethrohermawan/SoftwareDevProjects/#9 (C++ GUI)/offlinemusiceditor/taglib-install
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: TagLib
+Description: Audio meta-data library
+Requires:
+Version: 2.3
+Libs: -L${libdir} -ltag -lz
+Cflags: -I${includedir} -I${includedir}/taglib
