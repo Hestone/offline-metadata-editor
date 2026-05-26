@@ -7,6 +7,9 @@
 #include <limits>
 #include "taglib-install/include/taglib/fileref.h"
 #include "taglib-install/include/taglib/tag.h"
+#include "taglib-install/include/taglib/attachedpictureframe.h"
+#include "taglib-install/include/taglib/mpegfile.h"
+#include "taglib-install/include/taglib/id3v2tag.h"
 #include "nfd/src/include/nfd.h"
 
 void displayMainMenu()
@@ -46,8 +49,6 @@ void editArtistName(char * filename)
 
 void editSongCover(char * filename)
 {
-    TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
-
     NFD_Init();
 
     nfdchar_t *outPath = nullptr;
@@ -65,6 +66,53 @@ void editSongCover(char * filename)
     {
         puts("Success!");
         puts(outPath);
+
+        std::string audioFilePath = filename;
+        TagLib::MPEG::File songFile(audioFilePath.c_str());
+        if (!songFile.isValid())
+        {
+            std::cerr << "Invalid audio file." << std::endl;
+            return;
+        }
+
+        std::ifstream file(outPath, std::ios::binary | std::ios::ate);
+        if (!file.is_open())
+        {
+            std::cerr << "Could not open image file" << std::endl;
+            return;
+        }
+
+        std::streamsize size = file.tellg();
+        file.seekg(0, std::ios::beg);
+        std::vector<char> buffer(size);
+        if (!file.read(buffer.data(), size))
+        {
+            std::cerr << "Failed to read image data." << std::endl;
+            return;
+        }
+
+        TagLib::ByteVector picture(buffer.data(), size);
+
+        TagLib::ID3v2::Tag* tag = songFile.ID3v2Tag(true);
+
+        tag->removeFrames("APIC");
+
+        TagLib::ID3v2::AttachedPictureFrame * frame = new TagLib::ID3v2::AttachedPictureFrame();
+        frame->setMimeType("image/jpeg");
+        frame->setType(TagLib::ID3v2::AttachedPictureFrame::FrontCover);
+        frame->setDescription("Front Cover");
+        frame->setPicture(picture);
+
+        tag->addFrame(frame);
+        if (songFile.save())
+        {
+            std::cout << "Cover art successfully updated" << std::endl;
+            return;
+        } else
+        {
+            std::cerr << "Failed to save the file." << std::endl;
+        }
+
         NFD_FreePathU8(outPath);
     }
     else if (result == NFD_CANCEL)
