@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/Users/jethrohermawan/Qt/6.11.1"
+                "/Users/jethrohermawan/Qt/6.11.1",
+                "/Users/jethrohermawan/Qt/6.11.1/macos/lib/QtWidgets.framework/Versions/A/Headers"
             ],
             "defines": [],
             "cStandard": "c17",

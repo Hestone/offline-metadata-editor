@@ -1,6 +1,3 @@
-// #include <QApplication>
-// #include "mainwindow.h"
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -22,45 +19,27 @@ void displayMainMenu()
     std::cout << "Type any number from \"1\" to \"5\"" << std::endl;
 }
 
-void editSongTitle(char * filename)
+void editNameClasses(int option, char * filename)
 {
     TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
-    std::cout << "Type new song title: ";
-    std::string song_name;
-    std::getline(std::cin, song_name);
-    songfile.tag()->setTitle(song_name);
+    std::cout << "Edit (" << option << "): ";
+    std::string name;
+    std::getline(std::cin, name);
+    if (option == 1)
+    {
+        songfile.tag()->setTitle(name);
+    } else if (option == 2)
+    {
+        songfile.tag()->setArtist(name);
+    } else
+    {
+        songfile.tag()->setAlbum(name);
+    }
     if (songfile.save())
     {
-        std::cout << "Song title changed" << std::endl;
+        std::cout << "Option (" << option << ") successfully changed" << std::endl;
     };
 }
-
-void editArtistName(char * filename)
-{
-    TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
-    std::cout << "Type new artist title: ";
-    std::string artist_name;
-    std::getline(std::cin, artist_name);
-    songfile.tag()->setArtist(artist_name);
-    if (songfile.save())
-    {
-        std::cout << "Artist name changed" << std::endl;
-    };
-}
-
-void editAlbumName(char * filename)
-{
-    TagLib::FileRef songfile(filename, true, TagLib::AudioProperties::Average);
-    std::cout << "Type new album name: ";
-    std::string album_name;
-    std::getline(std::cin, album_name);
-    songfile.tag()->setAlbum(album_name);
-    if (songfile.save())
-    {
-        std::cout << "Album name changed" << std::endl;
-    };
-}
-
 
 void editSongCover(char * filename)
 {
@@ -129,12 +108,10 @@ void editSongCover(char * filename)
         }
 
         NFD_FreePathU8(outPath);
-    }
-    else if (result == NFD_CANCEL)
+    } else if (result == NFD_CANCEL)
     {
         puts("User pressed cancel.");
-    }
-    else
+    } else
     {
         printf("Error: %s\n", NFD_GetError());
     }
@@ -153,24 +130,15 @@ void run(char * filename)
         displayMainMenu();
         std::cin >> option;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        switch(option)
+        if (1 <= option && option <= 3)
         {
-            case 1:
-                editSongTitle(filename);
-                break;
-            case 2:
-                editArtistName(filename);
-                break;
-            case 3:
-                editAlbumName(filename);
-                break;   
-            case 4:
-                editSongCover(filename);
-                break;            
-            case 5:
-                break;
-            default:
-                std::cout << "Unknown option" << std::endl;
+            editNameClasses(option, filename);
+        } else if (option == 4)
+        {
+            editSongCover(filename);
+        } else if (option != 5)
+        {
+            std::cout << "Unknown option" << std::endl;
         }
     } while (option != 5);
 
