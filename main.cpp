@@ -43,8 +43,6 @@ void editNameClasses(int option, char * filename)
 
 void editSongCover(char * filename)
 {
-    NFD_Init();
-
     nfdchar_t *outPath = nullptr;
 
     nfdu8filteritem_t filters[1] = {
@@ -115,8 +113,6 @@ void editSongCover(char * filename)
     {
         printf("Error: %s\n", NFD_GetError());
     }
-
-    NFD_Quit();
 }
 
 void run(char * filename) 
@@ -148,7 +144,9 @@ int main(int argc, char * argv[1])
         return -1;
     }
 
+    NFD_Init();
     run(argv[1]);
+    NFD_Quit();
 
     return 0;
 }
