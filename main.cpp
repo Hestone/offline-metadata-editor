@@ -121,9 +121,6 @@ void editSongCover(char * filename)
 
 void run(char * filename) 
 {
-    // Open file
-    std::ifstream ReadFile(filename);
-
     int option = -1;
     do
     {
@@ -141,18 +138,10 @@ void run(char * filename)
             std::cout << "Unknown option" << std::endl;
         }
     } while (option != 5);
-
-    // Close file
-    ReadFile.close();
 }
 
 int main(int argc, char * argv[1])
 {
-    // QApplication a(argc, argv);
-
-    // MainWindow w;
-    // w.show();
-
     if (argc != 2)
     {
         std::cerr << "error: require filename" << std::endl;
@@ -161,6 +150,5 @@ int main(int argc, char * argv[1])
 
     run(argv[1]);
 
-    // return a.exec();
     return 0;
 }
